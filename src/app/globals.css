@@ -1,26 +1,232 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-ivory: #fff8ee;
+  --color-paper: #fffdf8;
+  --color-cream: #f8ecd6;
+  --color-sand: #ecd9b8;
+  --color-maroon: #6e1423;
+  --color-maroon-deep: #4a0a14;
+  --color-maroon-ink: #2e0710;
+  --color-rani: #c2185b;
+  --color-marigold: #f4a417;
+  --color-saffron: #e46b0e;
+  --color-gold: #b88a2a;
+  --color-gold-soft: #e2c27a;
+  --color-leaf: #2f6b3b;
+  --color-ink: #2b1a12;
+  --color-muted: #7a6150;
+
+  --font-display: var(--nf-display), "Cormorant Garamond", Georgia, serif;
+  --font-script: var(--nf-script), cursive;
+  --font-deva: var(--nf-deva), "Noto Serif Devanagari", serif;
+  --font-sans: var(--nf-sans), system-ui, sans-serif;
+
+  --shadow-card: 0 1px 0 rgb(184 138 42 / 0.25), 0 18px 40px -24px rgb(74 10 20 / 0.45);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-ivory);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Cormorant defaults to old-style figures; prices read better with lining ones. */
+.font-display {
+  font-variant-numeric: lining-nums proportional-nums;
+}
+
+/* ───────── Patterns ───────── */
+
+/* Soft block-print motif used behind light sections. */
+.bg-blockprint {
+  background-color: var(--color-ivory);
+  background-image:
+    radial-gradient(circle at 50% 50%, rgb(184 138 42 / 0.13) 0 2px, transparent 2.5px),
+    radial-gradient(circle at 0 0, rgb(194 24 91 / 0.07) 0 3px, transparent 3.5px),
+    radial-gradient(circle at 100% 100%, rgb(194 24 91 / 0.07) 0 3px, transparent 3.5px);
+  background-size: 34px 34px;
+}
+
+/* Deep maroon velvet with a faint gold lattice (jaali). */
+.bg-velvet {
+  background-color: var(--color-maroon-deep);
+  background-image:
+    radial-gradient(120% 80% at 50% 0%, rgb(194 24 91 / 0.35), transparent 60%),
+    radial-gradient(90% 60% at 50% 110%, rgb(244 164 23 / 0.18), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cg fill='none' stroke='%23e2c27a' stroke-opacity='.12' stroke-width='1'%3E%3Cpath d='M24 2 L46 24 L24 46 L2 24 Z'/%3E%3Ccircle cx='24' cy='24' r='5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: auto, auto, 48px 48px;
+}
+
+/* Gold foil text. */
+.text-foil {
+  background: linear-gradient(100deg, #f7e3a6 0%, #d9a84a 30%, #fff1c4 50%, #c98f2a 72%, #f2d48a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Scalloped edge between sections. */
+.scallop-bottom {
+  --s: 22px;
+  -webkit-mask: radial-gradient(var(--s) at 50% 100%, #0000 98%, #000) 50% / calc(2 * var(--s)) 100%;
+  mask: radial-gradient(var(--s) at 50% 100%, #0000 98%, #000) 50% / calc(2 * var(--s)) 100%;
+}
+
+/* Jharokha (palace window) arch used to frame dream illustrations. */
+.arch {
+  border-radius: 999px 999px 18px 18px;
+}
+
+/* ───────── Motion ───────── */
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin-slow {
+  animation: spin-slow 120s linear infinite;
+}
+
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-1.2deg);
+  }
+  50% {
+    transform: rotate(1.2deg);
+  }
+}
+.animate-sway {
+  transform-box: fill-box;
+  transform-origin: top center;
+  animation: sway 6s ease-in-out infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--drift, 40px), 110vh, 0) rotate(540deg);
+    opacity: 0.9;
+  }
+}
+.petal {
+  position: absolute;
+  top: 0;
+  animation: fall var(--dur, 14s) linear var(--delay, 0s) infinite;
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    transform: scaleY(1) translateY(0);
+    opacity: 1;
+  }
+  40% {
+    transform: scaleY(1.12) translateY(-1px);
+    opacity: 0.85;
+  }
+  70% {
+    transform: scaleY(0.94) translateY(0.5px);
+  }
+}
+.flame {
+  transform-origin: 50% 100%;
+  animation: flicker 1.6s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+.progress-shimmer {
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(255 255 255 / 0.55) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.8s ease-in-out infinite;
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes pop {
+  0% {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.sheet-backdrop {
+  animation: fade-in 0.25s ease-out both;
+}
+.sheet-panel {
+  animation: rise 0.35s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+}
+@media (min-width: 640px) {
+  .sheet-panel {
+    animation: pop 0.25s ease-out both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin-slow,
+  .animate-sway,
+  .petal,
+  .flame,
+  .progress-shimmer {
+    animation: none;
+  }
+  .petal {
+    display: none;
+  }
+}
+
+/* iOS safe areas for the bottom sheet & sticky bar. */
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }
