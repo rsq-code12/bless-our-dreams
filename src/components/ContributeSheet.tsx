@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { isDemo, wedding, type Dream } from "@/wedding.config";
-import { recordBlessing } from "@/app/actions";
 import { rupees } from "@/lib/format";
 import { upiLink, type UpiApp } from "@/lib/upi";
 import { useDevice } from "@/lib/device";
@@ -56,7 +54,6 @@ export function ContributeSheet({
   initial?: Draft;
   onClose: () => void;
 }) {
-  const router = useRouter();
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -70,8 +67,6 @@ export function ContributeSheet({
   const [message, setMessage] = useState(initial?.message ?? "");
   const [isPublic, setIsPublic] = useState(initial?.isPublic ?? true);
   const [utr, setUtr] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [pending, startTransition] = useTransition();
 
   // Lock page scroll, close on Escape, focus the panel.
   const onCloseRef = useRef(onClose);
@@ -96,23 +91,28 @@ export function ContributeSheet({
   }, [step, dream.id, amount, name, side, message, isPublic]);
 
   const go = (s: Step) => {
-    setError(null);
     setStep(s);
     panelRef.current?.scrollTo({ top: 0 });
   };
 
+  // No server on GitHub Pages: the guest tells the couple on WhatsApp, and the
+  // couple adds the gift to src/gifts.ts once it has reached their account.
   const submit = () => {
-    setError(null);
-    startTransition(async () => {
-      const res = await recordBlessing({ dreamId: dream.id, amount, name, side, message, utr, isPublic });
-      if (!res.ok) {
-        setError(res.error);
-        return;
-      }
-      saveDraft(null);
-      setStep("done");
-      router.refresh();
-    });
+    if (wedding.whatsapp && !isDemo) {
+      const sides = { bride: `${wedding.bride}'s side`, groom: `${wedding.groom}'s side`, both: "Both sides" };
+      const lines = [
+        `🪔 Shagun for ${couple}`,
+        `Dream: ${dream.title}`,
+        `Amount: ${rupees(amount)}`,
+        `From: ${name.trim()} (${sides[side]})`,
+        utr.trim() && `UPI ref: ${utr.trim()}`,
+        message.trim() && `Blessing: "${message.trim()}"`,
+        `Show on blessings wall: ${isPublic ? "Yes" : "No"}`,
+      ].filter(Boolean);
+      window.open(`https://wa.me/${wedding.whatsapp}?text=${encodeURIComponent(lines.join("\n"))}`, "_blank", "noopener");
+    }
+    saveDraft(null);
+    go("done");
   };
 
   return (
@@ -213,8 +213,6 @@ export function ContributeSheet({
               name={name}
               utr={utr}
               setUtr={setUtr}
-              pending={pending}
-              error={error}
               onBack={() => go("details")}
               onSubmit={submit}
             />
@@ -434,8 +432,6 @@ function PayStep(props: {
   name: string;
   utr: string;
   setUtr: (s: string) => void;
-  pending: boolean;
-  error: string | null;
   onBack: () => void;
   onSubmit: () => void;
 }) {
@@ -582,7 +578,11 @@ function PayStep(props: {
 
       <div className={`rounded-3xl p-4 transition ${opened ? "bg-marigold/15 ring-2 ring-marigold/50" : "bg-cream/50"}`}>
         <p className="font-display text-lg font-semibold text-maroon">Done paying?</p>
-        <p className="text-sm text-muted">Tell us so your blessing shows up on {couple}&apos;s board.</p>
+        <p className="text-sm text-muted">
+          {wedding.whatsapp && !isDemo
+            ? `Send ${couple} a quick WhatsApp so they know this blessing is from you.`
+            : `Let ${couple} know this blessing is from you.`}
+        </p>
         <label className="mt-3 block">
           <span className="text-xs font-medium text-ink">
             UPI reference / UTR number <span className="font-normal text-muted">(optional, helps the couple match it)</span>
@@ -595,20 +595,13 @@ function PayStep(props: {
             className="mt-1 w-full rounded-xl border border-gold/40 bg-paper px-3 py-2.5 font-mono text-sm text-ink outline-none placeholder:text-muted/50 focus:border-maroon focus:ring-4 focus:ring-marigold/25"
           />
         </label>
-        {props.error && (
-          <p role="alert" className="mt-3 rounded-xl bg-rani/10 px-3 py-2 text-sm text-rani">
-            {props.error}
-          </p>
-        )}
         <div className="mt-4 flex gap-3">
-          <SecondaryButton onClick={props.onBack} disabled={props.pending}>
-            Back
-          </SecondaryButton>
-          <PrimaryButton onClick={props.onSubmit} disabled={props.pending} className="flex-1">
-            {props.pending
-              ? "Adding your blessing…"
-              : isDemo
-                ? "Try it: add my blessing"
+          <SecondaryButton onClick={props.onBack}>Back</SecondaryButton>
+          <PrimaryButton onClick={props.onSubmit} className="flex-1">
+            {isDemo
+              ? "Try it: add my blessing"
+              : wedding.whatsapp
+                ? "I've paid · tell them on WhatsApp"
                 : `I've paid ${rupees(amount)}`}
           </PrimaryButton>
         </div>
@@ -621,7 +614,7 @@ function PayStep(props: {
 
 function DoneStep({ dream, name, onClose }: { dream: Dream; name: string; onClose: () => void }) {
   const share = () => {
-    const url = `${window.location.origin}/#bless-${dream.id}`;
+    const url = `${window.location.origin}${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/#bless-${dream.id}`;
     const text = `I just blessed ${couple}'s dream "${dream.title}" 💛 Skip the boxed gift and bless one of their dreams too: ${url}`;
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank", "noopener");
   };
@@ -631,8 +624,8 @@ function DoneStep({ dream, name, onClose }: { dream: Dream; name: string; onClos
       <p className="font-deva text-4xl text-maroon">धन्यवाद</p>
       <p className="mt-1 font-script text-3xl text-rani">Thank you, {name.split(" ")[0]}!</p>
       <p className="mx-auto mt-4 max-w-sm leading-relaxed text-ink">
-        Your blessing for <strong>{dream.title}</strong> is on its way to {couple}. They&apos;ll see it on their board
-        and confirm it as soon as it lands in their account.
+        Your blessing for <strong>{dream.title}</strong> is on its way to {couple}. It will appear on their board
+        once it has reached them.
       </p>
       <div className="mt-6 grid gap-3">
         <button

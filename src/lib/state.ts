@@ -1,46 +1,37 @@
-import "server-only";
-import { cache } from "react";
-import { connection } from "next/server";
 import { wedding } from "@/wedding.config";
-import { listContributions } from "./store";
-import type { Contribution, PublicState } from "./types";
+import { gifts } from "@/gifts";
+import type { PublicState } from "./types";
 
-export function countsTowardsProgress(c: Contribution) {
-  if (c.status === "rejected") return false;
-  if (c.status === "pending") return wedding.countUnconfirmedInProgress;
-  return true;
-}
-
-/** Everything the public pages need, with private fields stripped. */
-export const getPublicState = cache(async (): Promise<PublicState> => {
-  await connection();
-  const all = await listContributions();
-
+/** Progress, totals and the blessings wall, worked out from src/gifts.ts at build time. */
+export function getPublicState(): PublicState {
   const progress: PublicState["progress"] = {};
   for (const d of wedding.dreams) progress[d.id] = { dreamId: d.id, raised: 0, count: 0 };
 
   let totalRaised = 0;
   const guests = new Set<string>();
-  for (const c of all) {
-    if (!countsTowardsProgress(c) || !progress[c.dreamId]) continue;
-    progress[c.dreamId].raised += c.amount;
-    progress[c.dreamId].count += 1;
-    totalRaised += c.amount;
-    guests.add(c.name.trim().toLowerCase());
+  const valid = gifts.filter((g) => progress[g.dream] && Number.isFinite(g.amount) && g.amount > 0);
+
+  for (const g of valid) {
+    progress[g.dream].raised += g.amount;
+    progress[g.dream].count += 1;
+    totalRaised += g.amount;
+    guests.add(g.name.trim().toLowerCase());
   }
 
-  const blessings = all
-    .filter((c) => c.isPublic && c.status !== "rejected")
+  const blessings = valid
+    .map((g, i) => ({ g, i }))
+    .filter(({ g }) => g.showOnWall !== false)
+    .sort((a, b) => b.g.date.localeCompare(a.g.date) || b.i - a.i)
     .slice(0, 60)
-    .map((c) => ({
-      id: c.id,
-      dreamId: c.dreamId,
-      name: c.name,
-      side: c.side,
-      message: c.message,
-      amount: wedding.showAmountsPublicly ? c.amount : null,
-      createdAt: c.createdAt,
+    .map(({ g, i }) => ({
+      id: `${g.date}-${i}`,
+      dreamId: g.dream,
+      name: g.name,
+      side: g.side ?? "both",
+      message: g.message ?? "",
+      amount: wedding.showAmountsPublicly ? g.amount : null,
+      date: g.date,
     }));
 
-  return { progress, totalRaised, totalGuests: guests.size, blessings, generatedAt: Date.now() };
-});
+  return { progress, totalRaised, totalGuests: guests.size, blessings };
+}

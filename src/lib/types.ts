@@ -1,23 +1,20 @@
-export type ContributionStatus = "pending" | "confirmed" | "rejected";
-
 export type GuestSide = "bride" | "groom" | "both";
 
-export type Contribution = {
-  id: string;
-  dreamId: string;
+/** One shagun the couple has received, as listed in src/gifts.ts. */
+export type Gift = {
+  /** "YYYY-MM-DD" */
+  date: string;
   name: string;
-  side: GuestSide;
+  side?: GuestSide;
+  /** The dream's `id` from wedding.config.ts */
+  dream: string;
   amount: number;
-  message: string;
-  /** UPI transaction / reference number the guest typed, if any. */
-  utr: string;
-  /** Show this guest's name and message on the public wall. */
-  isPublic: boolean;
-  status: ContributionStatus;
-  createdAt: string;
+  message?: string;
+  /** Show the name and message on the public blessings wall. Defaults to true. */
+  showOnWall?: boolean;
 };
 
-/** What the public site is allowed to see about one contribution. */
+/** What the public site shows about one gift. */
 export type PublicBlessing = {
   id: string;
   dreamId: string;
@@ -25,7 +22,7 @@ export type PublicBlessing = {
   side: GuestSide;
   message: string;
   amount: number | null;
-  createdAt: string;
+  date: string;
 };
 
 export type DreamProgress = {
@@ -39,6 +36,4 @@ export type PublicState = {
   totalRaised: number;
   totalGuests: number;
   blessings: PublicBlessing[];
-  /** Server time when this snapshot was taken (for "2 min ago" labels). */
-  generatedAt: number;
 };

@@ -62,13 +62,16 @@ export const wedding = {
     payeeName: "Ananya Sharma",
   },
 
+  /**
+   * The couple's WhatsApp number with country code, digits only (e.g. "919876543210").
+   * After paying, guests tap "I've paid" and WhatsApp opens with their name, amount,
+   * dream and blessing already typed out, ready to send to this number.
+   * Leave empty to skip the WhatsApp step.
+   */
+  whatsapp: "",
+
   /** Hide individual amounts on the public blessings wall (totals still show). */
   showAmountsPublicly: false,
-  /**
-   * Count contributions that guests say they've paid but the couple hasn't
-   * confirmed yet towards the progress bars. Rejected ones never count.
-   */
-  countUnconfirmedInProgress: true,
 
   /** Quick-pick amounts. Shagun traditionally ends in 1. */
   shagunAmounts: [501, 1100, 2100, 5100, 11000, 21000],

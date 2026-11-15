@@ -21,19 +21,26 @@ const deva = Tiro_Devanagari_Hindi({
 const sans = DM_Sans({ variable: "--nf-sans", subsets: ["latin"] });
 
 const couple = `${wedding.bride} & ${wedding.groom}`;
+const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+/** Absolute address of the share image (set by the deploy workflow), so WhatsApp can fetch it. */
+const ogImage = process.env.SITE_URL ? `${process.env.SITE_URL.replace(/\/$/, "")}/og-image.png` : `${base}/og-image.png`;
 
 export const metadata: Metadata = {
-  // On Vercel this is filled in automatically; elsewhere set SITE_URL so WhatsApp previews work.
-  metadataBase: process.env.SITE_URL ? new URL(process.env.SITE_URL) : undefined,
   title: `${couple} · Bless Our Dreams`,
   description: `Instead of gifts, help ${couple} build the dreams they'll share. Contribute your shagun by UPI.`,
   applicationName: "Bless Our Dreams",
   appleWebApp: { capable: true, title: couple, statusBarStyle: "black-translucent" },
+  icons: {
+    icon: { url: `${base}/icon.svg`, type: "image/svg+xml" },
+    apple: { url: `${base}/apple-touch-icon.png`, sizes: "180x180" },
+  },
   openGraph: {
     title: `${couple} are getting married!`,
     description: "Skip the boxed gift. Bless one of our dreams instead.",
     type: "website",
+    images: [{ url: ogImage, width: 1200, height: 630, alt: `${couple}: bless our dreams` }],
   },
+  twitter: { card: "summary_large_image", images: [ogImage] },
 };
 
 export const viewport: Viewport = {

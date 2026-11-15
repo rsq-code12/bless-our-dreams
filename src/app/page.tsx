@@ -1,7 +1,6 @@
-import { Suspense } from "react";
 import { isDemo, wedding } from "@/wedding.config";
 import { getPublicState } from "@/lib/state";
-import { formatDate, rupees, timeAgo } from "@/lib/format";
+import { formatDate, rupees } from "@/lib/format";
 import { Countdown } from "@/components/Countdown";
 import { DreamBoard } from "@/components/DreamBoard";
 import { Divider, Diya, Mandala, Paisley, Petals, Toran } from "@/components/Ornaments";
@@ -25,9 +24,7 @@ export default function Home() {
             title="Our Dreams"
             subtitle="Pick a dream that speaks to you. Every shagun, big or small, moves it a little closer."
           />
-          <Suspense fallback={<DreamsFallback />}>
-            <LiveDreams />
-          </Suspense>
+          <LiveDreams />
         </div>
       </section>
       <HowItWorks />
@@ -38,9 +35,7 @@ export default function Home() {
             title="Blessings Wall"
             subtitle="Words of love from the families and friends who've blessed a dream."
           />
-          <Suspense fallback={<p className="text-center text-muted">Gathering blessings…</p>}>
-            <BlessingsWall />
-          </Suspense>
+          <BlessingsWall />
         </div>
       </section>
       <Celebrations />
@@ -134,8 +129,8 @@ function Letter() {
 
 /* ───────── Dreams (live) ───────── */
 
-async function LiveDreams() {
-  const state = await getPublicState();
+function LiveDreams() {
+  const state = getPublicState();
   const goal = wedding.dreams.reduce((s, d) => s + d.goal, 0);
   return (
     <>
@@ -154,16 +149,6 @@ function Stat({ value, label }: { value: string; label: string }) {
     <div className="px-2">
       <div className="font-display text-2xl font-semibold text-maroon sm:text-3xl">{value}</div>
       <div className="mt-0.5 text-[11px] tracking-wider text-muted uppercase sm:text-xs">{label}</div>
-    </div>
-  );
-}
-
-function DreamsFallback() {
-  return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {wedding.dreams.slice(0, 3).map((d) => (
-        <div key={d.id} className="h-[560px] animate-pulse rounded-[30px] bg-cream/70" />
-      ))}
     </div>
   );
 }
@@ -203,8 +188,8 @@ function HowItWorks() {
 const sideLabel = { bride: `${wedding.bride}'s side`, groom: `${wedding.groom}'s side`, both: "Family & friends" };
 const tints = ["bg-[#fff1e0]", "bg-[#fde8ef]", "bg-[#fff7d6]", "bg-[#eef6ea]"];
 
-async function BlessingsWall() {
-  const { blessings, generatedAt: now } = await getPublicState();
+function BlessingsWall() {
+  const { blessings } = getPublicState();
   if (blessings.length === 0) {
     return (
       <div className="mx-auto max-w-md rounded-3xl border border-dashed border-gold/50 bg-paper px-6 py-10 text-center">
@@ -235,7 +220,7 @@ async function BlessingsWall() {
               <span>
                 <span className="block font-semibold text-maroon">{b.name}</span>
                 <span className="text-xs text-muted">
-                  {sideLabel[b.side]} · {timeAgo(b.createdAt, now)}
+                  {sideLabel[b.side]} · {formatDate(`${b.date}T12:00:00+05:30`, { day: "numeric", month: "short" })}
                 </span>
               </span>
               <span className="shrink-0 rounded-full bg-white/70 px-2.5 py-1 text-[11px] font-medium text-maroon">

@@ -42,4 +42,3 @@ next-env.d.ts
 
 # local contribution data
 /data
-!.env.example

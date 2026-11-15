@@ -5,11 +5,11 @@ import { loadGoogleFont } from "@/lib/brand";
 
 /** The preview card WhatsApp, Instagram and iMessage show when the link is shared. */
 
-export const alt = `${wedding.bride} & ${wedding.groom}: bless our dreams`;
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
+export const dynamic = "force-static";
 
-export default async function OpenGraphImage() {
+const size = { width: 1200, height: 630 };
+
+export async function GET() {
   const names = `${wedding.bride} & ${wedding.groom}`;
   const date = formatDate(wedding.weddingDate, { day: "numeric", month: "long", year: "numeric" });
   const line1 = "Skip the boxed gift.";
