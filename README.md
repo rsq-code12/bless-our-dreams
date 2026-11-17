@@ -1,27 +1,41 @@
-# Bless Our Dreams: a wedding shagun portal
+# Shaadi ka card + Bless Our Dreams
 
-Guests open one link, pick one of the couple's dreams (honeymoon, first home, a café…),
-choose a shagun amount and pay **directly to the couple by UPI**. Then they send the couple a
-ready-made WhatsApp message with their name, amount and blessing. When the money arrives, the
-couple adds one line to a file on GitHub, and the dream's progress bar and the blessings wall
-update on their own.
+A digital Indian wedding invitation with a gentle gift portal behind it.
+
+**The invitation (`/`)** opens like a real card: sealed palace doors with the guest's name, which
+swing open by themselves. The invitation then plays like a story with no scrolling needed:
+- kalash, bells and rangoli;
+- the couple, with a pair of peacocks;
+- "Dear Sharma Family", with the date and a countdown;
+- the celebrations;
+- the lake palace at dusk;
+- RSVP on WhatsApp;
+- "Your presence is our present".
+
+Guests can swipe at any time, and the story picks up again when they stop.
+
+**The gift portal (`/gift/`)** is where guests who want to can bless one of the couple's dreams.
+Tap a dream, tap an amount, tap a UPI app, then tap "Send my blessing" (WhatsApp opens with the
+details filled in). No typing needed.
+
+**For the couple:**
+- **`/send/`:** type a guest's name and send them a personal invitation on WhatsApp in one tap.
+  Personal links look like `/?to=Sharma%20Family`.
+- **`/qr/`:** a printable table card with a QR code that opens the gift portal directly, for the
+  engagement or the wedding entrance.
 
 Hosted free on **GitHub Pages**. No server, no database, no payment gateway, no fees.
 
-- Indian-wedding design: marigold toran, mandala, jharokha arches, Devanagari touches
-- Works like an app on phones ("Add to Home Screen"), with a WhatsApp-ready preview card
-- UPI on phones: Google Pay, PhonePe, Paytm or any UPI app. On laptops: a scannable QR
-- Shagun amounts that end in 1, plus a "+₹1 for shagun?" nudge
-- Individual amounts are never shown publicly (configurable)
-
 ## 1. Make it yours: `src/wedding.config.ts`
 
-Names, date, city, the celebrations, the letter to guests, the dreams (title, story, goal,
-illustration), and:
+Names, parents' names, date, venue, the celebrations (with icons: `ring`, `haldi`, `mehendi`,
+`sangeet`, `pheras`, `reception`), the opening line (e.g. `॥ श्री गणेशाय नमः ॥`, or `""` to hide it),
+the dreams (title, story, goal, illustration), and:
 
 - `upi.vpa`: the couple's UPI ID. **While it's empty the site is in demo mode**: a banner says
   payments are off and no payment buttons or QR code are shown.
 - `whatsapp`: the couple's WhatsApp number with country code, digits only (e.g. `919876543210`).
+  This switches on the RSVP scene and the "Send my blessing" message.
 
 Illustrations available for a dream: `travel`, `home`, `aurora`, `cafe`, `blessing`.
 
@@ -77,8 +91,10 @@ runs a server, such as Vercel with Upstash Redis, so it can't run on GitHub Page
 | --- | --- |
 | `src/wedding.config.ts` | All the content, UPI ID, WhatsApp number |
 | `src/gifts.ts` | Gifts received (drives progress bars and the blessings wall) |
-| `src/app/page.tsx` | The site |
-| `src/components/ContributeSheet.tsx` | Amount → blessing → UPI pay → WhatsApp → thank-you flow |
+| `src/app/page.tsx`, `src/components/invite/` | The animated invitation (doors, scenes, illustrations) |
+| `src/app/gift/page.tsx` | The gift portal |
+| `src/app/send/`, `src/app/qr/` | Personal invite links, printable QR card |
+| `src/components/ContributeSheet.tsx` | One-screen amount → UPI app → WhatsApp → thank-you flow |
 | `src/components/DreamArt.tsx`, `Ornaments.tsx` | Hand-drawn SVG artwork |
 | `src/lib/upi.ts` | UPI link builder |
 | `.github/workflows/deploy.yml` | Build & publish to GitHub Pages |

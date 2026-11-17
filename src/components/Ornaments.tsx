@@ -7,6 +7,9 @@ type SvgProps = { className?: string };
 
 /* ───────── Marigold (genda) flower ───────── */
 
+/** Round SVG coordinates so server and browser render identical numbers. */
+const r2 = (n: number) => Math.round(n * 100) / 100;
+
 export function Marigold({ cx, cy, r = 9 }: { cx: number; cy: number; r?: number }) {
   const petals = 10;
   return (
@@ -16,27 +19,27 @@ export function Marigold({ cx, cy, r = 9 }: { cx: number; cy: number; r?: number
         return (
           <circle
             key={i}
-            cx={cx + Math.cos(a) * r * 0.72}
-            cy={cy + Math.sin(a) * r * 0.72}
-            r={r * 0.42}
+            cx={r2(cx + Math.cos(a) * r * 0.72)}
+            cy={r2(cy + Math.sin(a) * r * 0.72)}
+            r={r2(r * 0.42)}
             fill="#e46b0e"
           />
         );
       })}
-      <circle cx={cx} cy={cy} r={r * 0.78} fill="#f4a417" />
+      <circle cx={cx} cy={cy} r={r2(r * 0.78)} fill="#f4a417" />
       {Array.from({ length: 7 }, (_, i) => {
         const a = (i / 7) * Math.PI * 2 + 0.3;
         return (
           <circle
             key={i}
-            cx={cx + Math.cos(a) * r * 0.45}
-            cy={cy + Math.sin(a) * r * 0.45}
-            r={r * 0.22}
+            cx={r2(cx + Math.cos(a) * r * 0.45)}
+            cy={r2(cy + Math.sin(a) * r * 0.45)}
+            r={r2(r * 0.22)}
             fill="#ffc23d"
           />
         );
       })}
-      <circle cx={cx} cy={cy} r={r * 0.22} fill="#ffd96b" />
+      <circle cx={cx} cy={cy} r={r2(r * 0.22)} fill="#ffd96b" />
     </g>
   );
 }

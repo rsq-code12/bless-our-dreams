@@ -12,8 +12,8 @@ const size = { width: 1200, height: 630 };
 export async function GET() {
   const names = `${wedding.bride} & ${wedding.groom}`;
   const date = formatDate(wedding.weddingDate, { day: "numeric", month: "long", year: "numeric" });
-  const line1 = "Skip the boxed gift.";
-  const line2 = "Bless one of our dreams instead.";
+  const line1 = "You're invited";
+  const line2 = "to celebrate our wedding";
 
   // The image renderer can't shape Devanagari conjuncts, so the card uses the romanised greeting.
   const greeting = "Shubh Vivah";

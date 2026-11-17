@@ -6,6 +6,8 @@
  * ─────────────────────────────────────────────────────────────
  */
 
+export type EventIcon = "ring" | "haldi" | "mehendi" | "sangeet" | "pheras" | "reception";
+
 export type DreamArt = "travel" | "home" | "aurora" | "cafe" | "car" | "blessing";
 
 export type Dream = {
@@ -25,20 +27,34 @@ export type Dream = {
 export const wedding = {
   bride: "Ananya",
   groom: "Rohan",
-  /** Shown at the very top, like the first line of a wedding card. */
+  /** First line of the invitation, like the top of a printed card. Set to "" to hide. */
+  openingLine: "॥ श्री गणेशाय नमः ॥",
+  /** The big greeting on the opening scene and the gift page. */
   invocation: "॥ शुभ विवाह ॥",
   hashtag: "#AnRoKiShaadi",
   /** Main ceremony date & time, in IST. */
   weddingDate: "2026-12-12T19:30:00+05:30",
   city: "Udaipur, Rajasthan",
 
-  /** The celebrations, shown as a small timeline. */
+  /** Shown under each name on the invitation. Leave "" to hide. */
+  brideFamily: "Daughter of Mrs. Meera & Mr. Rakesh Sharma",
+  groomFamily: "Son of Mrs. Kavita & Mr. Anil Verma",
+
+  /** Main venue, shown on the invitation with a "Get directions" button. */
+  venue: {
+    name: "The Leela Palace",
+    address: "Lake Pichola, Udaipur, Rajasthan",
+    /** Any Google Maps link. Leave "" to search for the name + address. */
+    mapsUrl: "",
+  },
+
+  /** The celebrations, in order. `icon`: ring | haldi | mehendi | sangeet | pheras | reception */
   events: [
-    { name: "Engagement", local: "सगाई", date: "2026-12-09", place: "The Leela Palace" },
-    { name: "Haldi & Mehendi", local: "हल्दी · मेहंदी", date: "2026-12-10", place: "Poolside Lawns" },
-    { name: "Sangeet", local: "संगीत", date: "2026-12-11", place: "Durbar Hall" },
-    { name: "Pheras", local: "फेरे", date: "2026-12-12", place: "Lakeside Mandap" },
-  ],
+    { name: "Engagement", local: "सगाई", date: "2026-12-09", time: "7:00 PM", place: "The Leela Palace", icon: "ring" },
+    { name: "Haldi & Mehendi", local: "हल्दी · मेहंदी", date: "2026-12-10", time: "11:00 AM", place: "Poolside Lawns", icon: "mehendi" },
+    { name: "Sangeet", local: "संगीत", date: "2026-12-11", time: "8:00 PM", place: "Durbar Hall", icon: "sangeet" },
+    { name: "Pheras", local: "फेरे", date: "2026-12-12", time: "7:30 PM", place: "Lakeside Mandap", icon: "pheras" },
+  ] satisfies { name: string; local: string; date: string; time: string; place: string; icon: EventIcon }[],
 
   /** A short note from the couple to their guests. */
   letter: [

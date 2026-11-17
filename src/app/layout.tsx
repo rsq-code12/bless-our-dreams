@@ -26,8 +26,8 @@ const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const ogImage = process.env.SITE_URL ? `${process.env.SITE_URL.replace(/\/$/, "")}/og-image.png` : `${base}/og-image.png`;
 
 export const metadata: Metadata = {
-  title: `${couple} · Bless Our Dreams`,
-  description: `Instead of gifts, help ${couple} build the dreams they'll share. Contribute your shagun by UPI.`,
+  title: `${couple} · Wedding Invitation`,
+  description: `You're invited to celebrate the wedding of ${couple}. Tap to open your invitation.`,
   applicationName: "Bless Our Dreams",
   appleWebApp: { capable: true, title: couple, statusBarStyle: "black-translucent" },
   icons: {
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
     apple: { url: `${base}/apple-touch-icon.png`, sizes: "180x180" },
   },
   openGraph: {
-    title: `${couple} are getting married!`,
-    description: "Skip the boxed gift. Bless one of our dreams instead.",
+    title: `You're invited: ${couple} are getting married!`,
+    description: "Tap to open your invitation 💌",
     type: "website",
     images: [{ url: ogImage, width: 1200, height: 630, alt: `${couple}: bless our dreams` }],
   },

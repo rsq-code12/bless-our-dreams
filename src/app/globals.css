@@ -230,3 +230,430 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+/* ═════════════ Invitation scenes ═════════════
+   Elements start hidden and animate once their scene is first seen
+   (`.scene.is-on`). Looping ornaments (flames, bells, stars) always run. */
+
+.scene .reveal,
+.scene .a-rise,
+.scene .a-pop,
+.scene .a-fan,
+.scene .a-flip,
+.scene .a-window,
+.scene .a-star,
+.scene .a-fadein,
+.scene .a-coin,
+.scene .write {
+  opacity: 0;
+}
+.scene .a-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.scene.is-on .reveal {
+  animation: fade-up 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s) forwards;
+}
+.scene.is-on .write {
+  animation: write-in 1.6s cubic-bezier(0.6, 0, 0.3, 1) var(--d, 0s) forwards;
+}
+.scene.is-on .a-draw {
+  animation: draw 1.8s ease-in-out forwards;
+}
+.scene.is-on .a-rise {
+  animation: fade-up 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+.scene.is-on .a-pop {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pop-in 0.5s cubic-bezier(0.3, 1.6, 0.5, 1) forwards;
+}
+.scene.is-on .a-fan {
+  animation: fan-open 1.6s cubic-bezier(0.2, 0.9, 0.25, 1.1) 0.4s forwards;
+}
+.scene.is-on .a-flip {
+  animation: flip-in 1s cubic-bezier(0.2, 0.9, 0.3, 1.2) 0.3s forwards;
+}
+.scene.is-on .a-window {
+  animation: lights-on 0.6s ease forwards;
+}
+.scene.is-on .a-star {
+  animation:
+    fade-in 1s ease forwards,
+    twinkle 2.4s ease-in-out 1.5s infinite;
+}
+.scene.is-on .a-fadein {
+  animation: fade-in 1.2s ease forwards;
+}
+.scene.is-on .a-sunset {
+  animation: sunset 4s ease-in forwards;
+}
+.scene.is-on .a-flap {
+  animation: flap-open 0.9s cubic-bezier(0.5, 0, 0.3, 1) 0.5s forwards;
+}
+.scene.is-on .a-coin {
+  animation: coin-rise 1s cubic-bezier(0.2, 0.9, 0.3, 1.3) 1.2s forwards;
+}
+
+/* always-on loops */
+.a-swing {
+  animation: swing 3.2s ease-in-out infinite;
+}
+.a-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+.a-shimmer {
+  animation: shimmer-op 2.6s ease-in-out infinite;
+}
+.a-twinkle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: twinkle 1.8s ease-in-out infinite;
+}
+.a-bounce {
+  animation: bounce 1.2s ease-in-out infinite;
+}
+.a-floatnote {
+  animation: float-note 2.4s ease-out infinite;
+}
+.a-beat {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: beat 0.8s ease-in-out infinite;
+}
+.a-spark {
+  animation: spark 1.6s ease-out infinite;
+}
+.a-lantern {
+  animation: lantern 9s linear infinite;
+}
+.a-ripple {
+  animation: ripple 3s ease-in-out infinite;
+}
+.a-boat {
+  animation: boat 26s linear infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes write-in {
+  from {
+    opacity: 1;
+    clip-path: inset(-20% 100% -20% 0);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(-20% -5% -20% 0);
+    filter: blur(0);
+  }
+}
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes fan-open {
+  from {
+    opacity: 0;
+    transform: rotate(40deg) scale(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes flip-in {
+  from {
+    opacity: 0;
+    transform: perspective(600px) rotateX(-80deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes lights-on {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes sunset {
+  to {
+    transform: translateY(70px);
+    opacity: 0.3;
+  }
+}
+@keyframes flap-open {
+  to {
+    transform: scaleY(-1);
+  }
+}
+@keyframes coin-rise {
+  from {
+    opacity: 0;
+    transform: translateY(46px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-36px);
+  }
+}
+@keyframes swing {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+}
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+@keyframes shimmer-op {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@keyframes float-note {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+}
+@keyframes beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.06);
+  }
+}
+@keyframes spark {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+}
+@keyframes lantern {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(14px, -230px);
+  }
+}
+@keyframes ripple {
+  0%,
+  100% {
+    transform: translateX(-6px);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+}
+@keyframes boat {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(380px);
+  }
+}
+
+/* ───────── Doors intro ───────── */
+.door {
+  transition: transform 1.5s cubic-bezier(0.6, 0, 0.2, 1);
+  backface-visibility: hidden;
+}
+.doors-open .door-l {
+  transform: perspective(1400px) rotateY(105deg);
+}
+.doors-open .door-r {
+  transform: perspective(1400px) rotateY(-105deg);
+}
+.door-l {
+  transform-origin: left center;
+}
+.door-r {
+  transform-origin: right center;
+}
+.doors-open .seal {
+  transform: scale(1.4);
+  opacity: 0;
+}
+.seal {
+  transition:
+    transform 0.6s ease,
+    opacity 0.5s ease;
+}
+.doors-open .door-text {
+  opacity: 0;
+}
+.door-text {
+  transition: opacity 0.4s ease;
+}
+.doors-gone {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease 0.9s;
+}
+
+/* Story progress bars */
+@keyframes story-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.story-fill {
+  transform-origin: left;
+  animation: story-fill var(--dur, 6s) linear forwards;
+}
+.story-fill.paused {
+  animation-play-state: paused;
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+}
+.a-nudge {
+  animation: nudge 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene .reveal,
+  .scene .a-rise,
+  .scene .a-pop,
+  .scene .a-fan,
+  .scene .a-flip,
+  .scene .a-window,
+  .scene .a-star,
+  .scene .a-fadein,
+  .scene .a-coin,
+  .scene .write {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+  .scene .a-draw {
+    stroke-dashoffset: 0;
+    animation: none !important;
+  }
+  .a-swing,
+  .a-pulse,
+  .a-shimmer,
+  .a-twinkle,
+  .a-bounce,
+  .a-floatnote,
+  .a-beat,
+  .a-spark,
+  .a-lantern,
+  .a-ripple,
+  .a-boat,
+  .a-nudge {
+    animation: none !important;
+  }
+  .door {
+    transition: none;
+  }
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
