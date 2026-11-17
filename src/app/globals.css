@@ -21,6 +21,7 @@
   --font-script: var(--nf-script), cursive;
   --font-deva: var(--nf-deva), "Noto Serif Devanagari", serif;
   --font-sans: var(--nf-sans), system-ui, sans-serif;
+  --font-wrap: var(--nf-wrap), system-ui, sans-serif;
 
   --shadow-card: 0 1px 0 rgb(184 138 42 / 0.25), 0 18px 40px -24px rgb(74 10 20 / 0.45);
 }
@@ -677,4 +678,177 @@ input[type="number"] {
     animation: none;
     height: 10px;
   }
+}
+
+/* ═════════════ Shaadi Wrapped (story) ═════════════ */
+
+.cover-leave {
+  animation: cover-out 1.2s ease forwards;
+  pointer-events: none;
+}
+.cover-leave .cover-ganesha {
+  animation: ganesha-bless 1.2s ease forwards;
+}
+@keyframes cover-out {
+  0% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 1;
+    filter: brightness(1.35);
+  }
+  100% {
+    opacity: 0;
+    filter: brightness(2);
+  }
+}
+@keyframes ganesha-bless {
+  to {
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 30px #ffd36b);
+  }
+}
+.cover-tap {
+  animation: tap-glow 2.2s ease-in-out infinite;
+}
+@keyframes tap-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(244 164 23 / 0);
+  }
+  50% {
+    box-shadow: 0 0 0 9px rgb(244 164 23 / 0.18);
+  }
+}
+
+.slide-enter {
+  animation: slide-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* kinetic type */
+.k-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+.k-up {
+  display: block;
+  animation: k-up 0.85s cubic-bezier(0.2, 0.9, 0.2, 1) var(--d, 0s) both;
+}
+@keyframes k-up {
+  from {
+    transform: translateY(110%) rotate(5deg);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.k-pop {
+  animation: k-pop 0.65s cubic-bezier(0.3, 1.6, 0.5, 1) var(--d, 0s) both;
+}
+@keyframes k-pop {
+  from {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.k-in {
+  animation: fade-up 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s) both;
+}
+.k-right {
+  animation: k-right 0.7s cubic-bezier(0.2, 0.9, 0.2, 1) var(--d, 0s) both;
+}
+@keyframes k-right {
+  from {
+    transform: translateX(70%);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.k-shape {
+  animation: k-shape 1.2s cubic-bezier(0.2, 0.9, 0.2, 1) var(--d, 0s) both;
+}
+@keyframes k-shape {
+  from {
+    transform: scale(0) rotate(-50deg);
+  }
+  to {
+    transform: none;
+  }
+}
+.float-a {
+  animation: float-a 7s ease-in-out infinite;
+}
+.float-b {
+  animation: float-a 9s ease-in-out infinite reverse;
+}
+@keyframes float-a {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+  50% {
+    translate: 12px -16px;
+    rotate: 10deg;
+  }
+}
+.k-shake {
+  animation: k-shake 0.45s;
+}
+@keyframes k-shake {
+  25% {
+    transform: translateX(-7px);
+  }
+  75% {
+    transform: translateX(7px);
+  }
+}
+.confetti {
+  position: absolute;
+  top: -12px;
+  animation: confetti 2.6s cubic-bezier(0.3, 0.6, 0.6, 1) var(--delay, 0s) forwards;
+}
+@keyframes confetti {
+  to {
+    transform: translate(var(--x), 105vh) rotate(var(--r));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-up,
+  .k-pop,
+  .k-in,
+  .k-right,
+  .k-shape,
+  .float-a,
+  .float-b,
+  .slide-enter,
+  .confetti,
+  .cover-tap {
+    animation: none !important;
+  }
+}
+
+body[data-cover] .sound-toggle {
+  display: none;
 }

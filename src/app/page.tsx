@@ -1,6 +1,6 @@
-import { Invitation } from "@/components/invite/Invitation";
+import { Story } from "@/components/story/Story";
 
-/** The digital shaadi card: sealed doors, then an auto-playing invitation. */
+/** The digital shaadi card: Shri Ganesh opens it, then "Shaadi Wrapped" stories. */
 export default function InvitationPage() {
-  return <Invitation />;
+  return <Story />;
 }

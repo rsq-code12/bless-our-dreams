@@ -36,8 +36,8 @@ export function SoundToggle() {
       onClick={() => (started ? sound.setMuted(!muted) : sound.start())}
       aria-label={playing ? "Turn music off" : "Play music"}
       aria-pressed={playing}
-      className={`fixed top-[calc(env(safe-area-inset-top)+18px)] right-3 z-40 flex h-10 items-center gap-2 rounded-full bg-black/35 text-white shadow-lg backdrop-blur-md transition active:scale-95 ${
-        started ? "w-10 justify-center" : "px-3.5"
+      className={`sound-toggle fixed top-[calc(env(safe-area-inset-top)+18px)] right-3 z-40 flex h-10 items-center gap-2 rounded-full bg-black/35 text-white shadow-lg backdrop-blur-md transition active:scale-95 ${
+        started || isInvite ? "w-10 justify-center" : "px-3.5"
       }`}
     >
       {playing ? (
@@ -58,7 +58,7 @@ export function SoundToggle() {
             <circle cx="6" cy="18" r="3" />
             <circle cx="18" cy="16" r="3" />
           </svg>
-          <span className="text-xs font-semibold tracking-wide">Play music</span>
+          {!isInvite && <span className="text-xs font-semibold tracking-wide">Play music</span>}
         </>
       )}
     </button>

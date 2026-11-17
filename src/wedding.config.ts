@@ -56,6 +56,33 @@ export const wedding = {
     { name: "Pheras", local: "फेरे", date: "2026-12-12", time: "7:30 PM", place: "Lakeside Mandap", icon: "pheras" },
   ] satisfies { name: string; local: string; date: string; time: string; place: string; icon: EventIcon }[],
 
+  /** The love story, told Wrapped-style in the invitation. All sample text: make it yours. */
+  story: {
+    /** The day you met (counts "days together" on the invitation). */
+    metOn: "2019-11-23",
+    /** Fun numbers. Keep them short. */
+    stats: [
+      { value: 412, label: "cutting chai dates" },
+      { value: 9, label: "cities explored" },
+      { value: 1, label: "very nervous proposal" },
+    ],
+    /** A quick quiz for guests. `answer` is the index of the right option (0, 1 or 2). */
+    quiz: {
+      question: "Where did we first meet?",
+      options: ["A college fest", "A friend's sangeet", "On a dating app"],
+      answer: 1,
+      reveal: "At Priya's sangeet, fighting over the last gulab jamun 🍯",
+    },
+    /** Your top 5 moments, like a "top songs" list. */
+    moments: [
+      "First cutting chai at Marine Drive",
+      "The Goa trip that almost went wrong",
+      "Meeting the parents (we survived)",
+      "A proposal in the Mumbai rain",
+      "Saying yes to forever",
+    ],
+  },
+
   /** A short note from the couple to their guests. */
   letter: [
     "Your blessings, your laughter and your presence at our wedding are the greatest gifts we could ask for.",

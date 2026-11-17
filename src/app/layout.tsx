@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, DM_Sans, Great_Vibes, Tiro_Devanagari_Hindi } from "next/font/google";
+import { Bricolage_Grotesque, Cormorant_Garamond, DM_Sans, Great_Vibes, Tiro_Devanagari_Hindi } from "next/font/google";
 import { wedding } from "@/wedding.config";
 import { SoundToggle } from "@/components/SoundToggle";
 import "./globals.css";
@@ -20,6 +20,8 @@ const deva = Tiro_Devanagari_Hindi({
 });
 
 const sans = DM_Sans({ variable: "--nf-sans", subsets: ["latin"] });
+
+const wrap = Bricolage_Grotesque({ variable: "--nf-wrap", subsets: ["latin"], weight: ["500", "700", "800"] });
 
 const couple = `${wedding.bride} & ${wedding.groom}`;
 const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -55,7 +57,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en-IN"
-      className={`${display.variable} ${script.variable} ${deva.variable} ${sans.variable} antialiased`}
+      className={`${display.variable} ${script.variable} ${deva.variable} ${sans.variable} ${wrap.variable} antialiased`}
     >
       <body className="min-h-dvh">
         {children}
