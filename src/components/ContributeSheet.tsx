@@ -6,6 +6,7 @@ import { isDemo, wedding, type Dream } from "@/wedding.config";
 import { rupees } from "@/lib/format";
 import { upiLink, type UpiApp } from "@/lib/upi";
 import { useDevice } from "@/lib/device";
+import { sound } from "@/lib/sound";
 import { DreamArt } from "./DreamArt";
 import { Petals } from "./Ornaments";
 
@@ -113,6 +114,7 @@ export function ContributeSheet({ dream, initial, onClose }: { dream: Dream; ini
   }, [payment, device.mobile, amount]);
 
   const pick = (a: number) => {
+    sound.cue("tick");
     setAmount(a);
     setPaid(false);
     // Bring the pay buttons into view right away: one less scroll.
@@ -120,6 +122,7 @@ export function ContributeSheet({ dream, initial, onClose }: { dream: Dream; ini
   };
 
   const finish = () => {
+    sound.cue("coin");
     if (wedding.whatsapp && !isDemo) {
       const lines = [
         `🪔 Shagun for ${couple}`,

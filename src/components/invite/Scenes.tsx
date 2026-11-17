@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { wedding } from "@/wedding.config";
+import { sound } from "@/lib/sound";
 import { formatDate } from "@/lib/format";
 import { Countdown } from "../Countdown";
 import { Divider, Mandala, Marigold, Petals, Toran } from "../Ornaments";
@@ -182,6 +183,7 @@ export function SceneVenue() {
 
 export function SceneRsvp({ guest }: { guest: string }) {
   const send = (yes: boolean) => {
+    sound.cue("ghungroo");
     const who = guest || "";
     const text = yes
       ? `🎉 Yes! ${who ? `${who} ` : ""}will be there to celebrate ${wedding.bride} & ${wedding.groom}'s wedding. Can't wait!`

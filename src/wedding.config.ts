@@ -86,6 +86,15 @@ export const wedding = {
    */
   whatsapp: "",
 
+  /**
+   * Background music, which starts when a guest taps to open the doors.
+   * Leave `src` empty for the built-in shehnai, tanpura and tabla (composed for
+   * this site, so there are no copyright worries). To use your own song instead,
+   * put the file in /public/music/ and set e.g. src: "/music/our-song.mp3".
+   * Only use a track you're allowed to share publicly.
+   */
+  music: { src: "" },
+
   /** Hide individual amounts on the public blessings wall (totals still show). */
   showAmountsPublicly: false,
 

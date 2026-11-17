@@ -39,6 +39,24 @@ the dreams (title, story, goal, illustration), and:
 
 Illustrations available for a dream: `travel`, `home`, `aurora`, `cafe`, `blessing`.
 
+### Music & mandap sounds
+
+When a guest taps the doors open, they hear a shankh and temple bells, then an original shehnai
+melody (Raag Bhupali) over a tanpura drone and soft tabla. Each scene adds its own touch:
+- ghungroo as the names appear;
+- a bell as the date's heart is drawn;
+- a dhol beat for the celebrations;
+- wind chimes at the venue;
+- a coin clink for the shagun.
+
+Everything is synthesised in the browser (`src/lib/sound.ts`), so there are no audio files and
+no copyright issues. Guests can turn it off with the button in the top corner, and the choice
+is remembered. Browsers only allow sound after a tap, so if the doors open by themselves, the
+first tap anywhere starts the music.
+
+To use your own song instead, put it in `public/music/` and set `music.src` in the config (only
+use a track you're allowed to share publicly).
+
 ## 2. Record gifts: `src/gifts.ts`
 
 When a shagun lands in the UPI app, open `src/gifts.ts` on GitHub, click the pencil icon, add a

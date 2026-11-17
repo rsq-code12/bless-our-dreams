@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { wedding } from "@/wedding.config";
+import { sound, type Cue } from "@/lib/sound";
 import { Mandala } from "../Ornaments";
 import {
   SceneAarambh,
@@ -17,7 +18,18 @@ import {
 type SceneDef = { id: string; ms: number };
 
 const IDLE_RESUME_MS = 9000;
-const AUTO_OPEN_MS = 3800;
+const AUTO_OPEN_MS = 5000;
+
+/** Sound effect for each scene, and when it lands (ms after the scene appears). */
+const SCENE_CUES: Record<string, [Cue, number]> = {
+  aarambh: ["bells", 400],
+  couple: ["ghungroo", 700],
+  invite: ["chime", 1100],
+  events: ["dhol", 300],
+  venue: ["windchime", 900],
+  rsvp: ["ghungroo", 500],
+  blessing: ["coin", 1350],
+};
 
 /** "?to=Sharma%20Family" personalises the card. */
 function useGuestName() {
@@ -62,8 +74,11 @@ export function Invitation() {
   }, []);
 
   /* ── doors ── */
-  const open = useCallback(() => {
+  const open = useCallback((byTap = false) => {
     if (phaseRef.current !== "closed") return;
+    // A tap on the doors is what lets the browser play sound: shankh, bells, then music.
+    if (byTap && !sound.prefersOff()) sound.start("doors");
+    else sound.cue("doors");
     phaseRef.current = "opening";
     setPhase("opening");
     markSeen(0);
@@ -76,7 +91,7 @@ export function Invitation() {
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const t = setTimeout(open, reduce ? 0 : AUTO_OPEN_MS);
+    const t = setTimeout(() => open(false), reduce ? 0 : AUTO_OPEN_MS);
     return () => clearTimeout(t);
   }, [open]);
 
@@ -103,6 +118,20 @@ export function Invitation() {
     if (!root) return;
     root.scrollTo({ top: i * root.clientHeight, behavior: smooth ? "smooth" : "auto" });
   }, []);
+
+  /* ── a sound for each scene (the doors already rang the bells for the first one) ── */
+  const firstScene = useRef(true);
+  useEffect(() => {
+    if (phase !== "open") return;
+    if (active === 0 && firstScene.current) {
+      firstScene.current = false;
+      return;
+    }
+    const cue = SCENE_CUES[scenes[active]?.id];
+    if (!cue) return;
+    const t = setTimeout(() => sound.cue(cue[0]), cue[1]);
+    return () => clearTimeout(t);
+  }, [phase, active, scenes]);
 
   /* ── autoplay ── */
   useEffect(() => {
@@ -242,7 +271,7 @@ export function Invitation() {
         </>
       )}
 
-      {phase !== "open" && <Doors guest={guest} opening={phase === "opening"} onOpen={open} />}
+      {phase !== "open" && <Doors guest={guest} opening={phase === "opening"} onOpen={() => open(true)} />}
     </>
   );
 }
@@ -255,6 +284,7 @@ function Doors({ guest, opening, onOpen }: { guest: string; opening: boolean; on
     <div
       role="button"
       tabIndex={0}
+      data-doors
       aria-label="Open the invitation"
       onClick={onOpen}
       onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onOpen()}
@@ -287,6 +317,7 @@ function Doors({ guest, opening, onOpen }: { guest: string; opening: boolean; on
           {wedding.bride} &amp; {wedding.groom}
         </p>
         <p className="a-nudge mt-4 text-xs font-semibold tracking-[0.35em] text-gold-soft uppercase">Tap to open</p>
+        <p className="mt-2 text-[11px] text-gold-soft/70">🎶 with shehnai &amp; mandap sounds</p>
       </div>
     </div>
   );

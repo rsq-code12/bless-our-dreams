@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, DM_Sans, Great_Vibes, Tiro_Devanagari_Hindi } from "next/font/google";
 import { wedding } from "@/wedding.config";
+import { SoundToggle } from "@/components/SoundToggle";
 import "./globals.css";
 
 const display = Cormorant_Garamond({
@@ -56,7 +57,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en-IN"
       className={`${display.variable} ${script.variable} ${deva.variable} ${sans.variable} antialiased`}
     >
-      <body className="min-h-dvh">{children}</body>
+      <body className="min-h-dvh">
+        {children}
+        <SoundToggle />
+      </body>
     </html>
   );
 }
