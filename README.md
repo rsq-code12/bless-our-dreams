@@ -2,23 +2,20 @@
 
 A digital Indian wedding invitation with a gentle gift portal behind it.
 
-**The invitation (`/`)** opens with Shri Ganesh: gold line art that draws itself in, with
-"॥ श्री गणेशाय नमः ॥" and the Vakratunda shloka. One tap ("Tap to begin 🙏") plays the shankh and
-bells, then the invitation plays as **Shaadi Wrapped** stories, in the spirit of a year-in-review:
-- "Sharma Family, you're invited to the biggest day of our lives";
-- "Starring" the couple;
-- days together, counting up, plus fun stats;
-- a "where did we meet?" quiz;
-- "Our top 5 moments";
-- a giant save-the-date;
-- the events as a **Shaadi Playlist**;
-- "Destination unlocked";
-- RSVP;
-- "Your presence is our present";
-- a shareable **"Your invite, wrapped"** card.
+**The invitation (`/`)** is a traditional card, suitable for the whole family, elders included.
+It opens with Shri Ganesh: gold line art that draws itself in, with "॥ श्री गणेशाय नमः ॥" and the
+Vakratunda shloka. One tap ("Tap to begin 🙏") plays the shankh and bells and starts the shehnai.
+Then the card's pages turn by themselves, each with a gold border:
+1. the invitation from the parents, with the Hindi request line;
+2. the couple, with their parents' names;
+3. शुभ मुहूर्त, the auspicious date, with a countdown;
+4. कार्यक्रम, the programme of ceremonies;
+5. विवाह स्थल, the venue, with directions;
+6. RSVP, which only appears when a WhatsApp number is set;
+7. "आपका आशीर्वाद ही हमारा सबसे बड़ा उपहार है", with a discreet shagun link;
+8. स्वागतोत्सुक, the family members awaiting the guest.
 
-Tap right for next, tap left to go back, hold to pause, or just let it play. On a laptop the story
-sits in a phone frame with arrow buttons.
+Guests can tap right or left to turn pages, hold to pause, or just let it play.
 
 **The gift portal (`/gift/`)** is where guests who want to can bless one of the couple's dreams.
 Tap a dream, tap an amount, tap a UPI app, then tap "Send my blessing" (WhatsApp opens with the
@@ -36,8 +33,8 @@ Hosted free on **GitHub Pages**. No server, no database, no payment gateway, no 
 
 Names, parents' names, date, venue, the celebrations (with icons: `ring`, `haldi`, `mehendi`,
 `sangeet`, `pheras`, `reception`), the opening line (e.g. `॥ श्री गणेशाय नमः ॥`, or `""` to hide it),
-the love story for the Wrapped slides (`story`: when you met, fun stats, the quiz, top 5
-moments), the dreams (title, story, goal, illustration), and:
+the invitation wording (`invitation`: who is inviting, daughter/son, the Hindi line, and the
+स्वागतोत्सुक family list), the dreams (title, story, goal, illustration), and:
 
 - `upi.vpa`: the couple's UPI ID. **While it's empty the site is in demo mode**: a banner says
   payments are off and no payment buttons or QR code are shown.
@@ -116,7 +113,7 @@ runs a server, such as Vercel with Upstash Redis, so it can't run on GitHub Page
 | --- | --- |
 | `src/wedding.config.ts` | All the content, UPI ID, WhatsApp number |
 | `src/gifts.ts` | Gifts received (drives progress bars and the blessings wall) |
-| `src/app/page.tsx`, `src/components/story/` | Shri Ganesh opening and the Shaadi Wrapped stories |
+| `src/app/page.tsx`, `src/components/story/` | Shri Ganesh opening and the card pages |
 | `src/components/invite/Art.tsx` | Hand-drawn SVG illustrations (kalash, peacocks, palace, envelope, event icons) |
 | `src/app/gift/page.tsx` | The gift portal |
 | `src/app/send/`, `src/app/qr/` | Personal invite links, printable QR card |

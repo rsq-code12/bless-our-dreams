@@ -5,22 +5,19 @@ import { wedding } from "@/wedding.config";
 import { sound, type Cue } from "@/lib/sound";
 import { GaneshaCover } from "./Ganesha";
 import {
-  CoupleSlide,
-  DateSlide,
-  GiftSlide,
-  IntroSlide,
-  MomentsSlide,
-  PlaylistSlide,
-  QuizSlide,
-  RsvpSlide,
-  TogetherSlide,
-  VenueSlide,
-  WrappedSlide,
-} from "./slides";
+  AwaitingPage,
+  BlessingsPage,
+  CouplePage,
+  InvitePage,
+  MuhuratPage,
+  ProgrammePage,
+  RsvpPage,
+  VenuePage,
+} from "./pages";
 
 /**
- * The invitation as stories: Shri Ganesh opens it, then tap right / left
- * (or let it play), hold to pause. Like a year-in-review, but for a shaadi.
+ * The invitation, one card page at a time: Shri Ganesh opens it, then the
+ * pages turn by themselves (tap right / left to move, hold to pause).
  */
 
 type SlideDef = { id: string; ms: number; backdrop: string; cue?: [Cue, number] };
@@ -40,17 +37,14 @@ export function Story() {
   const guest = useGuestName();
   const slides: SlideDef[] = useMemo(
     () => [
-      { id: "intro", ms: 6000, backdrop: "#c2185b", cue: ["chime", 500] },
-      { id: "couple", ms: 7000, backdrop: "#f3c9a4", cue: ["ghungroo", 600] },
-      { id: "together", ms: 8000, backdrop: "#0f5e50", cue: ["tick", 2000] },
-      { id: "quiz", ms: 11000, backdrop: "#2b1a6b" },
-      { id: "moments", ms: 9000, backdrop: "#f4a417", cue: ["ghungroo", 700] },
-      { id: "date", ms: 7000, backdrop: "#c2185b", cue: ["dhol", 250] },
-      { id: "playlist", ms: 9000, backdrop: "#5a0c18", cue: ["chime", 400] },
-      { id: "venue", ms: 7500, backdrop: "#1a0b2e", cue: ["windchime", 700] },
-      ...(wedding.whatsapp ? [{ id: "rsvp", ms: 8000, backdrop: "#e46b0e" } as SlideDef] : []),
-      { id: "gift", ms: 8000, backdrop: "#f3c9a4", cue: ["coin", 1300] },
-      { id: "wrapped", ms: 0, backdrop: "#2e0710", cue: ["bells", 400] },
+      { id: "invite", ms: 11000, backdrop: "#6e1423", cue: ["chime", 600] },
+      { id: "couple", ms: 9000, backdrop: "#4a0a14", cue: ["ghungroo", 700] },
+      { id: "muhurat", ms: 9000, backdrop: "#6e1423", cue: ["bells", 500] },
+      { id: "programme", ms: 11000, backdrop: "#4a0a14", cue: ["dhol", 300] },
+      { id: "venue", ms: 9000, backdrop: "#1a0b2e", cue: ["windchime", 700] },
+      ...(wedding.whatsapp ? [{ id: "rsvp", ms: 9000, backdrop: "#6e1423" } as SlideDef] : []),
+      { id: "blessings", ms: 9000, backdrop: "#4a0a14", cue: ["chime", 500] },
+      { id: "awaiting", ms: 0, backdrop: "#6e1423", cue: ["bells", 600] },
     ],
     [],
   );
@@ -173,28 +167,22 @@ export function Story() {
   const slide = slides[i];
   const render = () => {
     switch (slide.id) {
-      case "intro":
-        return <IntroSlide guest={guest} />;
+      case "invite":
+        return <InvitePage guest={guest} />;
       case "couple":
-        return <CoupleSlide />;
-      case "together":
-        return <TogetherSlide />;
-      case "quiz":
-        return <QuizSlide />;
-      case "moments":
-        return <MomentsSlide />;
-      case "date":
-        return <DateSlide />;
-      case "playlist":
-        return <PlaylistSlide />;
+        return <CouplePage />;
+      case "muhurat":
+        return <MuhuratPage />;
+      case "programme":
+        return <ProgrammePage />;
       case "venue":
-        return <VenueSlide />;
+        return <VenuePage />;
       case "rsvp":
-        return <RsvpSlide guest={guest} />;
-      case "gift":
-        return <GiftSlide />;
+        return <RsvpPage guest={guest} />;
+      case "blessings":
+        return <BlessingsPage />;
       default:
-        return <WrappedSlide guest={guest} onReplay={replay} />;
+        return <AwaitingPage onReplay={replay} />;
     }
   };
 
@@ -245,34 +233,27 @@ export function Story() {
 
           {/* progress + header */}
           {playing && (
-            <div className="pointer-events-none absolute inset-x-0 top-0 z-30 bg-gradient-to-b from-black/35 to-transparent px-3 pt-[max(10px,env(safe-area-inset-top))] pb-6">
+            <div className="pointer-events-none absolute inset-x-0 top-0 z-30 px-5 pt-[max(10px,env(safe-area-inset-top))] pb-4">
               <div className="flex gap-1">
                 {slides.map((s, k) => (
-                  <div key={s.id} className="h-[3px] flex-1 overflow-hidden rounded-full bg-white/35">
-                    {k < i && <div className="h-full w-full bg-white" />}
+                  <div key={s.id} className="h-[3px] flex-1 overflow-hidden rounded-full bg-gold/35">
+                    {k < i && <div className="h-full w-full bg-gold" />}
                     {k === i && (
                       <div
                         key={`${run}`}
-                        className={`h-full w-full bg-white ${s.ms ? "story-fill" : ""} ${paused ? "paused" : ""}`}
+                        className={`h-full w-full bg-gold ${s.ms ? "story-fill" : ""} ${paused ? "paused" : ""}`}
                         style={{ "--dur": `${s.ms}ms` } as React.CSSProperties}
                       />
                     )}
                   </div>
                 ))}
               </div>
-              <div className="mt-2.5 flex items-center gap-2.5 pr-14">
-                <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-marigold to-rani font-script text-sm text-white ring-2 ring-white/70">
-                  {wedding.bride[0]}&amp;{wedding.groom[0]}
-                </span>
-                <span className="text-[13px] leading-tight font-semibold text-white drop-shadow">
-                  {wedding.bride} &amp; {wedding.groom}
-                  <span className="block text-[11px] font-normal text-white/75">Shaadi Wrapped</span>
-                </span>
+              <div className="mt-2 flex items-center pr-14">
                 <button
                   type="button"
                   onClick={() => setManualPause((p) => !p)}
                   aria-label={paused ? "Play" : "Pause"}
-                  className="pointer-events-auto ml-auto grid h-8 w-8 place-items-center rounded-full text-white"
+                  className="pointer-events-auto grid h-9 w-9 place-items-center rounded-full bg-black/25 text-white"
                 >
                   {paused ? (
                     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>
@@ -290,8 +271,8 @@ export function Story() {
           )}
 
           {playing && i === 0 && (
-            <p className="k-in pointer-events-none absolute right-0 bottom-6 left-0 z-30 text-center text-[11px] font-semibold tracking-[0.25em] text-white/80 uppercase" style={{ "--d": "2.5s" } as React.CSSProperties}>
-              Tap to continue →
+            <p className="k-in pointer-events-none absolute right-0 bottom-8 left-0 z-30 text-center text-[13px] font-semibold tracking-wide text-maroon/70" style={{ "--d": "2.5s" } as React.CSSProperties}>
+              Tap for the next page ›
             </p>
           )}
         </div>

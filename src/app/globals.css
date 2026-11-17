@@ -21,7 +21,6 @@
   --font-script: var(--nf-script), cursive;
   --font-deva: var(--nf-deva), "Noto Serif Devanagari", serif;
   --font-sans: var(--nf-sans), system-ui, sans-serif;
-  --font-wrap: var(--nf-wrap), system-ui, sans-serif;
 
   --shadow-card: 0 1px 0 rgb(184 138 42 / 0.25), 0 18px 40px -24px rgb(74 10 20 / 0.45);
 }
@@ -680,7 +679,7 @@ input[type="number"] {
   }
 }
 
-/* ═════════════ Shaadi Wrapped (story) ═════════════ */
+/* ═════════════ Card pages (story player) ═════════════ */
 
 .cover-leave {
   animation: cover-out 1.2s ease forwards;
